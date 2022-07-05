@@ -1,3 +1,14 @@
+"""
+#####################################
+Outhor: Abdirizak abdullahi hussein #
+Date:7/4/2022                       ###########################
+Note: i have only the copyright of the code but images Source:#
+	*flaticon												  #
+	*walpapers eff											  #
+###############################################################
+"""
+
+
 import pygame as pyg,random
 from pygame.locals import*
 from pygame import mixer
@@ -5,8 +16,10 @@ from pygame import mixer
 
 mixer.init()
 global bullet_sound
+#bullet sound when player shoot
 bullet_sound = mixer.Sound('sounds/laser.wav')
 
+#bullet class
 class Bullet:
 	def __init__(self,pos,image):
 		self.x = pos[0]
@@ -17,7 +30,6 @@ class Bullet:
 		self.rect = image.get_rect()
 		self.rect.center = (self.x,self.y)
 		self.bullet_speed = 8
-		self.bullet_rectanle = [self.rect]
 	def draw(self,surface):
 		self.bullet = surface.blit(self.image,[self.rect.x , self.rect.y])
 	def move(self):
@@ -36,7 +48,7 @@ class Player:
 		self.scr_width = scr_width
 		self.Bullets = []
 		self.bullet_img = bullet_img
-		self.cool_down_count = 0
+		self.cool_down_count = 0#cooldown_count is allowing the bullet not be as chain like this -----
 	def draw(self,surface):
 	 	surface.blit(self.image,[self.rect.x,self.rect.y])
 	def move(self,key_pressed):
@@ -45,6 +57,7 @@ class Player:
 		if key_pressed[K_LEFT] and self.rect.x >= 0:
 			self.rect.x -= self.Player_speed
 	def cool_down_func(self):
+		#if u wanna to increase the amount of bullet u shooting decrease the 25 below by 5
 		if self.cool_down_count >=25:
 			self.cool_down_count = 0
 		if self.cool_down_count > 0:
@@ -53,6 +66,7 @@ class Player:
 				self.cool_down_count = 0
 	def shoot(self,surface,key_pressed):
 		self.cool_down_func()
+		#when pressed space bar creating a bullet and adding into bullets list
 		if key_pressed[K_SPACE] and self.cool_down_count == 0:
 				self.Bullets.append(Bullet([self.rect.x+25+3,self.rect.y-8],self.bullet_img))
 				self.cool_down_count = 1
@@ -73,7 +87,7 @@ class Enemy:
 		self.Enemy_speed = 3
 		self.rigth = True 
 		self.left = False
-		self.bolock = 40
+		self.bolock = 40 #this block when ever enemy hits the wall will falling by this block
 
 
 	def draw(self,surface):
@@ -83,7 +97,7 @@ class Enemy:
 			if self.rect.x <=screen_width-self.width:
 				self.rect.x += self.Enemy_speed
 			else:
-				if self.rect.y <480:
+				if self.rect.y <480: #480 is the > player postion that means not moving any way
 					self.rect.y += self.bolock
 				self.rigth = False
 				self.left = True
