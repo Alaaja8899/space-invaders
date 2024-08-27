@@ -8,7 +8,7 @@ This project is a simple implementation of the Space Invaders arcade game using 
 
 ## Watch the demo video
 
-[Watch the video on Facebook](https://www.facebook.com/share/v/ZjGwk5h4G9SAjZEx/)
+[Watch the demo on Facebook](https://www.facebook.com/share/v/ZjGwk5h4G9SAjZEx/)
 
 
 ## Installation
