@@ -56,7 +56,7 @@ enemies(0,180,enemy_img)
 #score function
 def score(score_count):
 	nmfont = pyg.font.SysFont('carbel',36)
-	txt = 'Dhibcaha: '+ str(score_count)	
+	txt = 'Score: '+ str(score_count)	
 	scrFont = nmfont.render(txt,True,'white')
 	screen.blit(scrFont,[20,20])
 
@@ -65,7 +65,7 @@ def gameover():
 	global bg
 	screen.blit(bg,[0,0])
 	nmfont = pyg.font.SysFont('carbel',70)
-	txt = 'DHAMMAAD'	
+	txt = 'END GAME'	
 	scrFont = nmfont.render(txt,True,'green')
 	screen.blit(scrFont,[250,300])
 
