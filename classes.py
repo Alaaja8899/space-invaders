@@ -42,6 +42,7 @@ class Player:
 		self.y = pos[1]
 		self.image = image
 		self.width = image.get_width()
+		self.height = image.get_height()
 		self.Player_speed = 5
 		self.rect = image.get_rect()
 		self.rect.center = (self.x,self.y)
@@ -56,6 +57,11 @@ class Player:
 			self.rect.x += self.Player_speed
 		if key_pressed[K_LEFT] and self.rect.x >= 0:
 			self.rect.x -= self.Player_speed
+		if key_pressed[K_UP] and self.rect.y >= 0:
+			self.rect.y -= self.Player_speed
+		if key_pressed[K_DOWN] and self.rect.y <= self.scr_width-self.height:
+			self.rect.y += self.Player_speed
+
 	def cool_down_func(self):
 		#if u wanna to increase the amount of bullet u shooting decrease the 25 below by 5
 		if self.cool_down_count >=25:
