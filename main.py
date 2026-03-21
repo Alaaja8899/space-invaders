@@ -65,12 +65,17 @@ def draw_ui(score_count, health):
 	screen.blit(health_surf,[sw - 150, 20])
 
 #game over surface
-def gameover():
+def gameover(win=False):
 	global bg
 	screen.blit(bg,[0,0])
 	nmfont = pyg.font.SysFont('carbel',70)
-	txt = 'END GAME'	
-	scrFont = nmfont.render(txt,True,'green')
+	if win:
+		txt = 'YOU WIN!'
+		color = 'green'
+	else:
+		txt = 'END GAME'
+		color = 'red'
+	scrFont = nmfont.render(txt,True,color)
 	screen.blit(scrFont,[250,300])
 
 	pyg.display.update()
@@ -108,7 +113,7 @@ while not Gameover:
 			enemy_bullets.append(EnemyBullet((en.rect.centerx, en.rect.bottom)))
 
 		if en.rect.y >= player.rect.y:
-			gameover()
+			gameover(win=False)
 		for buli in player.Bullets:
 			if buli.rect.colliderect(en.rect):
 				#when ever the bullet colliderect enemy score+=1
@@ -129,9 +134,12 @@ while not Gameover:
 			explosions.play()
 			enemy_bullets.remove(e_bul)
 			if player.health <= 0:
-				gameover()
+				gameover(win=False)
 		elif e_bul.rect.y > sh:
 			enemy_bullets.remove(e_bul)
+
+	if not enemy_list:
+		gameover(win=True)
 
 	#ui count function
 	draw_ui(score_count, player.health)
