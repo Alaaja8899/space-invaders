@@ -44,7 +44,7 @@ class EnemyBullet:
 		self.speed = 5
 		self.rect = pyg.Rect(self.x, self.y, 5, 15)
 	def draw(self, surface):
-		pyg.draw.rect(surface, (255, 0, 0), self.rect)
+		pyg.draw.rect(surface, "#D13100", self.rect)
 	def move(self):
 		self.rect.y += self.speed
 	def remove(self):
