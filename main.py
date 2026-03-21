@@ -14,7 +14,7 @@ import pygame as pyg,random as rand , sys , time
 from pygame.locals import*
 
 #importing the classes from classes file
-from classes import Player,Bullet,Enemy
+from classes import Player,Bullet,Enemy,EnemyBullet
 from pygame import mixer
 #screen width screen height 
 sw,sh = 800,600
@@ -53,12 +53,16 @@ def enemies(x,y,image):
 		x += 200
 		enemy_list.append(enemy)
 enemies(0,180,enemy_img)
-#score function
-def score(score_count):
+#ui function
+def draw_ui(score_count, health):
 	nmfont = pyg.font.SysFont('carbel',36)
 	txt = 'Score: '+ str(score_count)	
 	scrFont = nmfont.render(txt,True,'white')
 	screen.blit(scrFont,[20,20])
+	
+	health_txt = 'Health: '+ str(health)
+	health_surf = nmfont.render(health_txt,True,'red')
+	screen.blit(health_surf,[sw - 150, 20])
 
 #game over surface
 def gameover():
@@ -73,6 +77,7 @@ def gameover():
 	time.sleep(5)
 	sys.exit()
 Gameover = False
+enemy_bullets = []
 while not Gameover:
 	screen.fill('black')
 	fps.tick(60)
@@ -95,9 +100,13 @@ while not Gameover:
 	player.move(key_pressed)
 	player.shoot(screen,key_pressed) 
 	#iterating enemy list and ; drawing moving ,checking collision
-	for en in enemy_list:
+	for en in enemy_list[:]:
 		en.draw(screen)
 		en.move(sw,sh)
+
+		if rand.randint(1, 150) == 1:
+			enemy_bullets.append(EnemyBullet((en.rect.centerx, en.rect.bottom)))
+
 		if en.rect.y >= player.rect.y:
 			gameover()
 		for buli in player.Bullets:
@@ -105,10 +114,25 @@ while not Gameover:
 				#when ever the bullet colliderect enemy score+=1
 				score_count+=1
 				explosions.play()
-				#and enemy will restarting at the top of the screen 
-				en.restart()
+				#and enemy will vanish from the screen 
+				if en in enemy_list:
+					enemy_list.remove(en)
 				# and removing the bullet
 				buli.remove()
-	#score count function
-	score(score_count)
+
+	# handle enemy bullets
+	for e_bul in enemy_bullets[:]:
+		e_bul.draw(screen)
+		e_bul.move()
+		if e_bul.rect.colliderect(player.rect):
+			player.health -= 20
+			explosions.play()
+			enemy_bullets.remove(e_bul)
+			if player.health <= 0:
+				gameover()
+		elif e_bul.rect.y > sh:
+			enemy_bullets.remove(e_bul)
+
+	#ui count function
+	draw_ui(score_count, player.health)
 	pyg.display.update() 

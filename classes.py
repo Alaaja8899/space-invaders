@@ -36,6 +36,20 @@ class Bullet:
 		self.rect.y -= self.bullet_speed
 	def remove(self):
 		self.rect.y = -1000
+
+class EnemyBullet:
+	def __init__(self, pos):
+		self.x = pos[0]
+		self.y = pos[1]
+		self.speed = 5
+		self.rect = pyg.Rect(self.x, self.y, 5, 15)
+	def draw(self, surface):
+		pyg.draw.rect(surface, (255, 0, 0), self.rect)
+	def move(self):
+		self.rect.y += self.speed
+	def remove(self):
+		self.rect.y = 1000
+
 class Player:
 	def __init__(self,pos,image,scr_width,bullet_img):
 		self.x = pos[0]
@@ -44,6 +58,7 @@ class Player:
 		self.width = image.get_width()
 		self.height = image.get_height()
 		self.Player_speed = 5
+		self.health = 100
 		self.rect = image.get_rect()
 		self.rect.center = (self.x,self.y)
 		self.scr_width = scr_width
