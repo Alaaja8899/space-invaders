@@ -232,8 +232,19 @@ while not Gameover:
 		elif power.rect.y > sh:
 			power_ups.remove(power)
 
-	if not enemy_list:
-		gameover(win=True)
+	if not enemy_list and not boss_active:
+		if wave_complete_timer > 0:
+			wave_complete_timer -= 1
+			wave_font = pyg.font.SysFont('carbel', 50)
+			wave_text = wave_font.render('Wave Complete!', True, 'green')
+			screen.blit(wave_text, [sw//2 - 150, sh//2])
+		else:
+			wave_number += 1
+			if wave_number > max_wave:
+				gameover(win=True)
+			else:
+				spawn_wave(wave_number)
+				wave_complete_timer = 0
 
 	#ui count function
 	draw_ui(score_count, player.health, wave_number)
