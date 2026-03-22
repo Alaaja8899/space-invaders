@@ -14,7 +14,7 @@ import pygame as pyg,random as rand , sys , time
 from pygame.locals import*
 
 #importing the classes from classes file
-from classes import Player,Bullet,Enemy,EnemyBullet
+from classes import Player,Bullet,Enemy,EnemyBullet,PowerUp,BossEnemy
 from pygame import mixer
 #screen width screen height 
 sw,sh = 800,600
@@ -40,6 +40,13 @@ enemy_img =  pyg.image.load('images/enemy.png')
 fps = pyg.time.Clock()#frame per second
 #score counter
 score_count = 0
+wave_number = 1
+max_wave = 10
+enemies_per_wave = 7
+power_ups = []
+boss_active = False
+boss = None
+wave_complete_timer = 0
 
 player =  Player([sw//3,sh-100],player_img,800,bullet_img)
 enemy = Enemy(sw//3-50,100,enemy_img)
@@ -83,6 +90,7 @@ def gameover(win=False):
 	sys.exit()
 Gameover = False
 enemy_bullets = []
+frame_count = 0
 while not Gameover:
 	screen.fill('black')
 	fps.tick(60)
