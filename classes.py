@@ -77,14 +77,21 @@ class Player:
 		self.height = image.get_height()
 		self.Player_speed = 5
 		self.health = 100
+		self.max_health = 100
 		self.rect = image.get_rect()
 		self.rect.center = (self.x,self.y)
 		self.scr_width = scr_width
 		self.Bullets = []
 		self.bullet_img = bullet_img
-		self.cool_down_count = 0#cooldown_count is allowing the bullet not be as chain like this -----
+		self.cool_down_count = 0
+		self.rapid_fire = False
+		self.rapid_fire_timer = 0
+		self.shield = False
+		self.shield_timer = 0#cooldown_count is allowing the bullet not be as chain like this -----
 	def draw(self,surface):
 	 	surface.blit(self.image,[self.rect.x,self.rect.y])
+	 	if self.shield:
+	 		pyg.draw.circle(surface, '#00FFFF', self.rect.center, 40, 3)
 	def move(self,key_pressed):
 		if key_pressed[K_RIGHT] and self.rect.x <= self.scr_width-self.width:
 			self.rect.x += self.Player_speed
@@ -96,13 +103,23 @@ class Player:
 			self.rect.y += self.Player_speed
 
 	def cool_down_func(self):
-		#if u wanna to increase the amount of bullet u shooting decrease the 25 below by 5
-		if self.cool_down_count >=25:
+		cooldown_limit = 10 if self.rapid_fire else 25
+		if self.cool_down_count >= cooldown_limit:
 			self.cool_down_count = 0
 		if self.cool_down_count > 0:
-			self.cool_down_count +=1
-			if self.cool_down_count >=25:
+			self.cool_down_count += 1
+			if self.cool_down_count >= cooldown_limit:
 				self.cool_down_count = 0
+		
+		if self.rapid_fire_timer > 0:
+			self.rapid_fire_timer -= 1
+			if self.rapid_fire_timer == 0:
+				self.rapid_fire = False
+		
+		if self.shield_timer > 0:
+			self.shield_timer -= 1
+			if self.shield_timer == 0:
+				self.shield = False
 	def shoot(self,surface,key_pressed):
 		self.cool_down_func()
 		#when pressed space bar creating a bullet and adding into bullets list
