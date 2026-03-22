@@ -85,7 +85,7 @@ def spawn_wave(wave_num):
 
 spawn_wave(wave_number)
 #ui function
-def draw_ui(score_count, health):
+def draw_ui(score_count, health, wave_num):
 	nmfont = pyg.font.SysFont('carbel',36)
 	txt = 'Score: '+ str(score_count)	
 	scrFont = nmfont.render(txt,True,'white')
@@ -93,7 +93,21 @@ def draw_ui(score_count, health):
 	
 	health_txt = 'Health: '+ str(health)
 	health_surf = nmfont.render(health_txt,True,'red')
-	screen.blit(health_surf,[sw - 150, 20])
+	screen.blit(health_surf,[sw - 200, 20])
+	
+	wave_txt = 'Wave: '+ str(wave_num)
+	wave_surf = nmfont.render(wave_txt,True,'cyan')
+	screen.blit(wave_surf,[sw//2 - 60, 20])
+	
+	if player.rapid_fire:
+		rf_txt = 'RAPID FIRE!'
+		rf_surf = nmfont.render(rf_txt, True, 'yellow')
+		screen.blit(rf_surf, [20, 60])
+	
+	if player.shield:
+		shield_txt = 'SHIELD ACTIVE'
+		shield_surf = nmfont.render(shield_txt, True, 'cyan')
+		screen.blit(shield_surf, [20, 100])
 
 #game over surface
 def gameover(win=False):
@@ -174,5 +188,5 @@ while not Gameover:
 		gameover(win=True)
 
 	#ui count function
-	draw_ui(score_count, player.health)
+	draw_ui(score_count, player.health, wave_number)
 	pyg.display.update() 
