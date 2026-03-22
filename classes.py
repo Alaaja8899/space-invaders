@@ -38,10 +38,10 @@ class Bullet:
 		self.rect.y = -1000
 
 class EnemyBullet:
-	def __init__(self, pos):
+	def __init__(self, pos, speed=5):
 		self.x = pos[0]
 		self.y = pos[1]
-		self.speed = 5
+		self.speed = speed
 		self.rect = pyg.Rect(self.x, self.y, 5, 15)
 	def draw(self, surface):
 		pyg.draw.rect(surface, "#D13100", self.rect)
