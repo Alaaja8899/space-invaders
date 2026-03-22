@@ -206,13 +206,31 @@ while not Gameover:
 		e_bul.draw(screen)
 		e_bul.move()
 		if e_bul.rect.colliderect(player.rect):
-			player.health -= 20
-			explosions.play()
+			if not player.shield:
+				player.health -= 20
+				explosions.play()
 			enemy_bullets.remove(e_bul)
 			if player.health <= 0:
 				gameover(win=False)
 		elif e_bul.rect.y > sh:
 			enemy_bullets.remove(e_bul)
+	
+	# handle power-ups
+	for power in power_ups[:]:
+		power.draw(screen)
+		power.move()
+		if power.rect.colliderect(player.rect):
+			if power.power_type == 'health':
+				player.health = min(player.health + 30, player.max_health)
+			elif power.power_type == 'rapid_fire':
+				player.rapid_fire = True
+				player.rapid_fire_timer = 300
+			elif power.power_type == 'shield':
+				player.shield = True
+				player.shield_timer = 300
+			power_ups.remove(power)
+		elif power.rect.y > sh:
+			power_ups.remove(power)
 
 	if not enemy_list:
 		gameover(win=True)
