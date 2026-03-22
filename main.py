@@ -165,13 +165,15 @@ while not Gameover:
 			gameover(win=False)
 		for buli in player.Bullets:
 			if buli.rect.colliderect(en.rect):
-				#when ever the bullet colliderect enemy score+=1
-				score_count+=1
-				explosions.play()
-				#and enemy will vanish from the screen 
-				if en in enemy_list:
-					enemy_list.remove(en)
-				# and removing the bullet
+				if en.take_damage():
+					score_count += 1
+					explosions.play()
+					if en in enemy_list:
+						enemy_list.remove(en)
+					
+					if rand.randint(1, 15) == 1:
+						power_type = rand.choice(['health', 'rapid_fire', 'shield'])
+						power_ups.append(PowerUp((en.rect.centerx, en.rect.centery), power_type))
 				buli.remove()
 
 	# handle enemy bullets
