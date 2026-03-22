@@ -50,6 +50,24 @@ class EnemyBullet:
 	def remove(self):
 		self.rect.y = 1000
 
+class PowerUp:
+	def __init__(self, pos, power_type):
+		self.x = pos[0]
+		self.y = pos[1]
+		self.power_type = power_type
+		self.speed = 2
+		self.rect = pyg.Rect(self.x, self.y, 30, 30)
+		self.colors = {
+			'health': '#00FF00',
+			'rapid_fire': '#FFFF00',
+			'shield': '#00FFFF'
+		}
+	def draw(self, surface):
+		pyg.draw.circle(surface, self.colors[self.power_type], self.rect.center, 15)
+		pyg.draw.circle(surface, 'white', self.rect.center, 15, 2)
+	def move(self):
+		self.rect.y += self.speed
+
 class Player:
 	def __init__(self,pos,image,scr_width,bullet_img):
 		self.x = pos[0]
