@@ -132,6 +132,7 @@ frame_count = 0
 while not Gameover:
 	screen.fill('black')
 	fps.tick(60)
+	frame_count += 1
 	#background
 	screen.blit(bg,[0,0])
 	#event handling
@@ -155,8 +156,10 @@ while not Gameover:
 		en.draw(screen)
 		en.move(sw,sh)
 
-		if rand.randint(1, 150) == 1:
-			enemy_bullets.append(EnemyBullet((en.rect.centerx, en.rect.bottom)))
+		shoot_chance = max(50, 150 - wave_number * 10)
+		if rand.randint(1, shoot_chance) == 1:
+			bullet_speed = 5 + wave_number // 2
+			enemy_bullets.append(EnemyBullet((en.rect.centerx, en.rect.bottom), speed=bullet_speed))
 
 		if en.rect.y >= player.rect.y:
 			gameover(win=False)
