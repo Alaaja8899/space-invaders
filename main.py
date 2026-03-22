@@ -161,8 +161,8 @@ while not Gameover:
 			for pos in boss.get_bullet_positions():
 				enemy_bullets.append(EnemyBullet(pos, speed=6))
 		
-		for buli in player.Bullets:
-			if buli.rect.colliderect(boss.rect):
+		for buli in player.Bullets[:]:
+			if boss and buli.rect.colliderect(boss.rect):
 				if boss.take_damage():
 					score_count += 50
 					explosions.play()
