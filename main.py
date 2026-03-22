@@ -150,7 +150,32 @@ while not Gameover:
 	#drawing,moving,shooting for the player
 	player.draw(screen)
 	player.move(key_pressed)
-	player.shoot(screen,key_pressed) 
+	player.shoot(screen,key_pressed)
+	
+	# Handle boss enemy
+	if boss_active and boss:
+		boss.draw(screen)
+		boss.move(sw, sh)
+		
+		if frame_count % 60 == 0:
+			for pos in boss.get_bullet_positions():
+				enemy_bullets.append(EnemyBullet(pos, speed=6))
+		
+		for buli in player.Bullets:
+			if buli.rect.colliderect(boss.rect):
+				if boss.take_damage():
+					score_count += 50
+					explosions.play()
+					boss_active = False
+					boss = None
+					wave_complete_timer = 120
+					if rand.randint(1, 2) == 1:
+						power_type = rand.choice(['health', 'rapid_fire', 'shield'])
+						power_ups.append(PowerUp((sw//2, 100), power_type))
+				else:
+					score_count += 5
+				buli.remove()
+	
 	#iterating enemy list and ; drawing moving ,checking collision
 	for en in enemy_list[:]:
 		en.draw(screen)
