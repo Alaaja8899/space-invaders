@@ -97,7 +97,7 @@ class Player:
 			bullet.move()
 
 class Enemy:
-	def __init__(self,x,y,image):
+	def __init__(self,x,y,image,enemy_type='normal'):
 		self.width = image.get_width()
 		self.hight = image.get_height()
 		self.x =x 
@@ -105,14 +105,27 @@ class Enemy:
 		self.image = image
 		self.rect = image.get_rect()
 		self.rect.center = (self.x,self.y)
-		self.Enemy_speed = 3
+		self.enemy_type = enemy_type
+		if enemy_type == 'fast':
+			self.Enemy_speed = 5
+			self.bolock = 30
+			self.health = 1
+		elif enemy_type == 'tank':
+			self.Enemy_speed = 2
+			self.bolock = 50
+			self.health = 3
+		else:
+			self.Enemy_speed = 3
+			self.bolock = 40
+			self.health = 1
 		self.rigth = True 
-		self.left = False
-		self.bolock = 40 #this block when ever enemy hits the wall will falling by this block
+		self.left = False #this block when ever enemy hits the wall will falling by this block
 
 
 	def draw(self,surface):
 		self.enemy = surface.blit(self.image,[self.rect.x,self.rect.y])
+		if self.enemy_type == 'tank' and self.health > 1:
+			pyg.draw.rect(surface, 'yellow', (self.rect.x, self.rect.y - 5, self.width * (self.health / 3), 3))
 	def move(self,screen_width,screen_hight):
 		if self.rigth:
 			if self.rect.x <=screen_width-self.width:
@@ -130,13 +143,6 @@ class Enemy:
 					self.rect.y += self.bolock
 				self.left = False
 				self.rigth = True
-	def restart(self):
-		save = 0
-		self.rect.y = 100
-		self.rect.x = random.randint(0,800-64)
-		self.Enemy_speed = 7
-		save +=1
-		if save >0:
-			self.Enemy_speed = 8
-		if save >3:
-			self.Enemy_speed = 10
+	def take_damage(self):
+		self.health -= 1
+		return self.health <= 0
