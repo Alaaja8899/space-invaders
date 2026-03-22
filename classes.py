@@ -181,3 +181,50 @@ class Enemy:
 	def take_damage(self):
 		self.health -= 1
 		return self.health <= 0
+
+class BossEnemy:
+	def __init__(self, x, y, image):
+		self.width = image.get_width() * 2
+		self.height = image.get_height() * 2
+		self.image = pyg.transform.scale(image, (int(self.width), int(self.height)))
+		self.x = x
+		self.y = y
+		self.rect = self.image.get_rect()
+		self.rect.center = (self.x, self.y)
+		self.speed = 2
+		self.health = 20
+		self.max_health = 20
+		self.right = True
+		self.shoot_pattern = 0
+		
+	def draw(self, surface):
+		surface.blit(self.image, [self.rect.x, self.rect.y])
+		health_bar_width = 100
+		health_percentage = self.health / self.max_health
+		pyg.draw.rect(surface, 'red', (self.rect.centerx - 50, self.rect.y - 15, health_bar_width, 8))
+		pyg.draw.rect(surface, 'green', (self.rect.centerx - 50, self.rect.y - 15, health_bar_width * health_percentage, 8))
+		
+	def move(self, screen_width, screen_height):
+		if self.right:
+			if self.rect.x <= screen_width - self.width:
+				self.rect.x += self.speed
+			else:
+				self.right = False
+		else:
+			if self.rect.x >= 0:
+				self.rect.x -= self.speed
+			else:
+				self.right = True
+				
+	def take_damage(self):
+		self.health -= 1
+		return self.health <= 0
+		
+	def get_bullet_positions(self):
+		self.shoot_pattern = (self.shoot_pattern + 1) % 3
+		if self.shoot_pattern == 0:
+			return [(self.rect.centerx, self.rect.bottom)]
+		elif self.shoot_pattern == 1:
+			return [(self.rect.left + 20, self.rect.bottom), (self.rect.right - 20, self.rect.bottom)]
+		else:
+			return [(self.rect.left + 20, self.rect.bottom), (self.rect.centerx, self.rect.bottom), (self.rect.right - 20, self.rect.bottom)]
