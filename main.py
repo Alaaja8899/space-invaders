@@ -54,12 +54,36 @@ enemy = Enemy(sw//3-50,100,enemy_img)
 #new enemies creating and adding into the list
 enemy_list = []
 enemy_list.append(enemy)
-def enemies(x,y,image):
-	for e in range(7):
-		enemy = Enemy(x,y,image)
-		x += 200
+
+def spawn_wave(wave_num):
+	global enemy_list, boss_active, boss
+	enemy_list.clear()
+	
+	if wave_num % 3 == 0:
+		boss_active = True
+		boss = BossEnemy(sw//2, 100, enemy_img)
+		return
+	
+	x = 0
+	y = 100 + (wave_num % 3) * 50
+	num_enemies = min(enemies_per_wave + wave_num, 12)
+	
+	for e in range(num_enemies):
+		if wave_num >= 5 and e % 3 == 0:
+			enemy_type = 'tank'
+		elif wave_num >= 3 and e % 2 == 0:
+			enemy_type = 'fast'
+		else:
+			enemy_type = 'normal'
+		
+		enemy = Enemy(x, y, enemy_img, enemy_type)
+		x += 150 if num_enemies > 8 else 200
+		if x > sw - 100:
+			x = 0
+			y += 80
 		enemy_list.append(enemy)
-enemies(0,180,enemy_img)
+
+spawn_wave(wave_number)
 #ui function
 def draw_ui(score_count, health):
 	nmfont = pyg.font.SysFont('carbel',36)
